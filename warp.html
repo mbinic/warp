@@ -1,0 +1,14 @@
+<body style="margin: 0px; overflow: hidden; height: 100%">
+<div id="main" style="height: 100%; margin: 0; overflow: hidden; background-image: url('bkg.png'); background-position: top center; text-align: right">
+	<button onclick="engage('datahub.png')">Engage DH!</button>
+	<button onclick="engage('startrek.png')">Engage ST!</button>
+</div>
+<script src="StarTrekOverlay.js"></script>
+<script>	
+	function engage(logo){
+		var pageContainerElement = document.getElementById("main");
+		InitStarTrekOverlay(pageContainerElement, logo, 2000);
+	}
+</script>
+	
+</body>
