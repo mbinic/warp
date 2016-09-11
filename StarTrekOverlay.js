@@ -51,7 +51,7 @@ function InitStarTrekOverlay(pageContainerElement, logoImageSrc, warpDurationMil
 		var elem = document.createElement("div");
 		elem.id = "StarTrekOverlay";
 		elem.className = "StarTrekOverlay";
-		elem.innerHTML = '<canvas id="StarTrekOverlayCanvas"></canvas>';
+		elem.innerHTML = '<canvas id="StarTrekOverlayCanvas" tabindex="0"></canvas>';
 		document.body.appendChild(elem);
 		return elem;
 	}
@@ -70,6 +70,8 @@ function InitStarTrekOverlay(pageContainerElement, logoImageSrc, warpDurationMil
 	var width = 0;
 	var height = 0;
 	
+	canvas.focus(); // focus the canvas so keyboard events don't pass through
+
 	function initSizes(){
 		width = overlay.offsetWidth,
 		height = overlay.offsetHeight;
@@ -180,11 +182,16 @@ function InitStarTrekOverlay(pageContainerElement, logoImageSrc, warpDurationMil
 		requestAnimFrame(renderCallback);
 	};
 
+	var closing = false;
+	
 	function close(){
-		overlay.removeEventListener("resize", initSizes);
-		renderCallback = function(){};
-		overlay.className += " StarTrekWarpJumpFast";
-		window.setTimeout(destroy, 1200);
+		if (!closing){
+			closing = true;
+			overlay.removeEventListener("resize", initSizes);
+			renderCallback = function(){};
+			overlay.className += " StarTrekWarpJumpFast";
+			window.setTimeout(destroy, 1200);
+		}
 	}
 	
 	function destroy(){
@@ -199,6 +206,7 @@ function InitStarTrekOverlay(pageContainerElement, logoImageSrc, warpDurationMil
 	window.setTimeout(function(){
 		logoTimestamp = 0;
 		canvas.addEventListener("click", close);
+		canvas.addEventListener("keyup", close);
 	}, warpDurationMilliseconds);
 
 	// jump-into original page contents
